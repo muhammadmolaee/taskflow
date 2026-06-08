@@ -1,5 +1,6 @@
-import { useState, useMemo } from 'react'
+import { useState } from 'react'
 import { useTasks } from './context/TaskContext'
+import useFilters from './hooks/useFilters'
 import Header from './components/Header'
 import TaskForm from './components/TaskForm'
 import TaskList from './components/TaskList'
@@ -18,33 +19,9 @@ function App() {
     status: '',
   })
 
+  const { filteredTasks, stats } = useFilters(tasks, filters)
+
   const toggleDarkMode = () => setDarkMode(prev => !prev)
-
-  const filteredTasks = useMemo(() => {
-    return tasks.filter(task => {
-
-      // Search filter
-      if (filters.search) {
-        const q = filters.search.toLowerCase()
-        if (
-          !task.title.toLowerCase().includes(q) &&
-          !task.description.toLowerCase().includes(q)
-        ) return false
-      }
-
-      // Priority filter
-      if (filters.priority && task.priority !== filters.priority) return false
-
-      // Category filter
-      if (filters.category && task.category !== filters.category) return false
-
-      // Status filter
-      if (filters.status === 'active' && task.completed) return false
-      if (filters.status === 'completed' && !task.completed) return false
-
-      return true
-    })
-  }, [tasks, filters])
 
   if (loading) {
     return (
@@ -65,22 +42,22 @@ function App() {
         <main className="max-w-3xl mx-auto px-4 py-6">
 
           {/* Stats bar */}
-          <div className="grid grid-cols-3 gap-3 mb-6">
+          <div className="grid grid-cols-4 gap-3 mb-6">
             <div className="bg-white dark:bg-gray-800 rounded-2xl shadow p-3 text-center">
-              <p className="text-2xl font-bold text-indigo-500">{tasks.length}</p>
-              <p className="text-xs text-gray-400 mt-1">Total Tasks</p>
+              <p className="text-2xl font-bold text-indigo-500">{stats.total}</p>
+              <p className="text-xs text-gray-400 mt-1">Total</p>
             </div>
             <div className="bg-white dark:bg-gray-800 rounded-2xl shadow p-3 text-center">
-              <p className="text-2xl font-bold text-green-500">
-                {tasks.filter(t => t.completed).length}
-              </p>
+              <p className="text-2xl font-bold text-green-500">{stats.completed}</p>
               <p className="text-xs text-gray-400 mt-1">Completed</p>
             </div>
             <div className="bg-white dark:bg-gray-800 rounded-2xl shadow p-3 text-center">
-              <p className="text-2xl font-bold text-yellow-500">
-                {tasks.filter(t => !t.completed).length}
-              </p>
+              <p className="text-2xl font-bold text-yellow-500">{stats.remaining}</p>
               <p className="text-xs text-gray-400 mt-1">Remaining</p>
+            </div>
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow p-3 text-center">
+              <p className="text-2xl font-bold text-red-500">{stats.overdue}</p>
+              <p className="text-xs text-gray-400 mt-1">Overdue</p>
             </div>
           </div>
 
