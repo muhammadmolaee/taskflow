@@ -1,30 +1,15 @@
 import { Search, X } from 'lucide-react'
 import { useTasks } from '../context/TaskContext'
 
-const FilterBar = ({ filters, setFilters }) => {
+const FilterBar = ({ filters, setFilters, sortBy, setSortBy }) => {
   const { categories } = useTasks()
-
-  const handleSearch = (e) => {
-    setFilters(prev => ({ ...prev, search: e.target.value }))
-  }
-
-  const handlePriority = (e) => {
-    setFilters(prev => ({ ...prev, priority: e.target.value }))
-  }
-
-  const handleCategory = (e) => {
-    setFilters(prev => ({ ...prev, category: e.target.value }))
-  }
-
-  const handleStatus = (e) => {
-    setFilters(prev => ({ ...prev, status: e.target.value }))
-  }
 
   const clearFilters = () => {
     setFilters({ search: '', priority: '', category: '', status: '' })
+    setSortBy('createdAt')
   }
 
-  const hasActiveFilters = filters.search || filters.priority || filters.category || filters.status
+  const hasActiveFilters = filters.search || filters.priority || filters.category || filters.status || sortBy !== 'createdAt'
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-2xl shadow p-4 mb-6 flex flex-col gap-3">
@@ -36,7 +21,7 @@ const FilterBar = ({ filters, setFilters }) => {
           type="text"
           placeholder="Search tasks..."
           value={filters.search}
-          onChange={handleSearch}
+          onChange={e => setFilters(prev => ({ ...prev, search: e.target.value }))}
           className="w-full bg-gray-100 dark:bg-gray-700 dark:text-white rounded-xl pl-9 pr-4 py-2 outline-none focus:ring-2 focus:ring-indigo-400"
         />
         {filters.search && (
@@ -49,13 +34,13 @@ const FilterBar = ({ filters, setFilters }) => {
         )}
       </div>
 
-      {/* Filter dropdowns */}
-      <div className="grid grid-cols-3 gap-2">
+      {/* Filter and sort dropdowns */}
+      <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
 
         {/* Priority filter */}
         <select
           value={filters.priority}
-          onChange={handlePriority}
+          onChange={e => setFilters(prev => ({ ...prev, priority: e.target.value }))}
           className="bg-gray-100 dark:bg-gray-700 dark:text-white rounded-xl px-3 py-2 outline-none text-sm"
         >
           <option value="">All Priorities</option>
@@ -67,7 +52,7 @@ const FilterBar = ({ filters, setFilters }) => {
         {/* Category filter */}
         <select
           value={filters.category}
-          onChange={handleCategory}
+          onChange={e => setFilters(prev => ({ ...prev, category: e.target.value }))}
           className="bg-gray-100 dark:bg-gray-700 dark:text-white rounded-xl px-3 py-2 outline-none text-sm"
         >
           <option value="">All Categories</option>
@@ -79,12 +64,23 @@ const FilterBar = ({ filters, setFilters }) => {
         {/* Status filter */}
         <select
           value={filters.status}
-          onChange={handleStatus}
+          onChange={e => setFilters(prev => ({ ...prev, status: e.target.value }))}
           className="bg-gray-100 dark:bg-gray-700 dark:text-white rounded-xl px-3 py-2 outline-none text-sm"
         >
           <option value="">All Tasks</option>
           <option value="active">Active</option>
           <option value="completed">Completed</option>
+        </select>
+
+        {/* Sort */}
+        <select
+          value={sortBy}
+          onChange={e => setSortBy(e.target.value)}
+          className="bg-gray-100 dark:bg-gray-700 dark:text-white rounded-xl px-3 py-2 outline-none text-sm"
+        >
+          <option value="createdAt">Newest First</option>
+          <option value="priority">By Priority</option>
+          <option value="dueDate">By Due Date</option>
         </select>
 
       </div>

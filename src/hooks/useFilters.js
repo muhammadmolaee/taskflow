@@ -1,8 +1,9 @@
 import { useMemo } from 'react'
+import { parseISO } from 'date-fns'
 
-const useFilters = (tasks, filters) => {
+const useFilters = (tasks, filters, sortBy) => {
   const filteredTasks = useMemo(() => {
-    return tasks.filter(task => {
+    let result = tasks.filter(task => {
 
       // Search filter
       if (filters.search) {
@@ -25,7 +26,29 @@ const useFilters = (tasks, filters) => {
 
       return true
     })
-  }, [tasks, filters])
+
+    // Sort
+    if (sortBy === 'priority') {
+      const order = { high: 0, medium: 1, low: 2 }
+      result = [...result].sort((a, b) => order[a.priority] - order[b.priority])
+    }
+
+    if (sortBy === 'dueDate') {
+      result = [...result].sort((a, b) => {
+        if (!a.dueDate) return 1
+        if (!b.dueDate) return -1
+        return parseISO(a.dueDate) - parseISO(b.dueDate)
+      })
+    }
+
+    if (sortBy === 'createdAt') {
+      result = [...result].sort((a, b) =>
+        parseISO(b.createdAt) - parseISO(a.createdAt)
+      )
+    }
+
+    return result
+  }, [tasks, filters, sortBy])
 
   const stats = useMemo(() => ({
     total: tasks.length,

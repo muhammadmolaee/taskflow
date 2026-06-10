@@ -12,6 +12,7 @@ function App() {
   const [darkMode, setDarkMode] = useState(
     window.matchMedia('(prefers-color-scheme: dark)').matches
   )
+  const [sortBy, setSortBy] = useState('createdAt')
   const [filters, setFilters] = useState({
     search: '',
     priority: '',
@@ -19,7 +20,7 @@ function App() {
     status: '',
   })
 
-  const { filteredTasks, stats } = useFilters(tasks, filters)
+  const { filteredTasks, stats } = useFilters(tasks, filters, sortBy)
 
   const toggleDarkMode = () => setDarkMode(prev => !prev)
 
@@ -63,7 +64,7 @@ function App() {
 
           <CategoryManager />
           <TaskForm />
-          <FilterBar filters={filters} setFilters={setFilters} />
+          <FilterBar filters={filters} setFilters={setFilters} sortBy={sortBy} setSortBy={setSortBy} />
           <TaskList tasks={filteredTasks} />
 
         </main>
