@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useTasks } from '../context/TaskContext'
 import { PlusCircle } from 'lucide-react'
 
-const TaskForm = () => {
+const TaskForm = ({ onTaskAdded }) => {
   const { createTask, categories } = useTasks()
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
@@ -15,6 +15,7 @@ const TaskForm = () => {
     e.preventDefault()
     if (!title.trim()) return
     await createTask({ title, description, priority, category, dueDate })
+    if (onTaskAdded) onTaskAdded()
     setTitle('')
     setDescription('')
     setPriority('medium')
@@ -25,7 +26,7 @@ const TaskForm = () => {
 
   return (
     <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-800 rounded-2xl shadow p-4 mb-6">
-      
+
       {/* Main input */}
       <div className="flex gap-2">
         <input
@@ -48,7 +49,7 @@ const TaskForm = () => {
       {/* Expanded options */}
       {expanded && (
         <div className="mt-3 grid grid-cols-1 gap-3">
-          
+
           <textarea
             placeholder="Description (optional)"
             value={description}

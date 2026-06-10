@@ -1,3 +1,5 @@
+import Toast from './components/Toast'
+import useToast from './hooks/useToast'
 import Spinner from './components/Spinner'
 import { useState } from 'react'
 import { useTasks } from './context/TaskContext'
@@ -10,9 +12,8 @@ import CategoryManager from './components/CategoryManager'
 
 function App() {
   const { tasks, loading } = useTasks()
-  const [darkMode, setDarkMode] = useState(
-    window.matchMedia('(prefers-color-scheme: dark)').matches
-  )
+  const { toasts, addToast, removeToast } = useToast()
+  const [darkMode, setDarkMode] = useState(window.matchMedia('(prefers-color-scheme: dark)').matches)
   const [sortBy, setSortBy] = useState('createdAt')
   const [filters, setFilters] = useState({
     search: '',
@@ -64,12 +65,13 @@ function App() {
           </div>
 
           <CategoryManager />
-          <TaskForm />
+          <TaskForm onTaskAdded={() => addToast('Task added successfully! 🎉')} />
           <FilterBar filters={filters} setFilters={setFilters} sortBy={sortBy} setSortBy={setSortBy} />
           <TaskList tasks={filteredTasks} />
 
         </main>
       </div>
+      <Toast toasts={toasts} removeToast={removeToast} />
     </div>
   )
 }
