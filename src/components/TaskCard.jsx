@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useTasks } from '../context/TaskContext'
 import { Trash2, Pencil, Check, X, AlertCircle } from 'lucide-react'
-import { format, isPast, parseISO } from 'date-fns'
+import { getDueDateLabel, getDueDateColor } from '../utils/dateUtils'
 
 const priorityStyles = {
   high: 'border-l-4 border-red-400',
@@ -25,7 +25,6 @@ const TaskCard = ({ task }) => {
   const [editCategory, setEditCategory] = useState(task.category || '')
 
   const category = categories.find(c => c.id === task.category)
-  const isOverdue = task.dueDate && !task.completed && isPast(parseISO(task.dueDate))
 
   const handleSave = async () => {
     if (!editTitle.trim()) return
@@ -101,7 +100,7 @@ const TaskCard = ({ task }) => {
 
   return (
     <div className={`bg-white dark:bg-gray-800 rounded-2xl shadow p-4 flex gap-3 items-start ${priorityStyles[task.priority]}`}>
-      
+
       {/* Checkbox */}
       <button
         onClick={() => toggleTask(task.id)}
@@ -138,13 +137,9 @@ const TaskCard = ({ task }) => {
           )}
           {/* Due date */}
           {task.dueDate && (
-            <span className={`text-xs px-2 py-0.5 rounded-full flex items-center gap-1
-              ${isOverdue
-                ? 'bg-red-100 text-red-600 dark:bg-red-900 dark:text-red-300'
-                : 'bg-gray-100 text-gray-500 dark:bg-gray-700 dark:text-gray-300'
-              }`}>
-              {isOverdue && <AlertCircle size={10} />}
-              {format(parseISO(task.dueDate), 'MMM d, yyyy')}
+            <span className={`text-xs px-2 py-0.5 rounded-full flex items-center gap-1 ${getDueDateColor(task.dueDate, task.completed)}`}>
+              {getDueDateLabel(task.dueDate) === 'Overdue' && <AlertCircle size={10} />}
+              {getDueDateLabel(task.dueDate)}
             </span>
           )}
         </div>
