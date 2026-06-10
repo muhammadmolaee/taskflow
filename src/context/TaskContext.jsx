@@ -1,3 +1,4 @@
+import { exportData, importData } from '../utils/exportImport'
 import { createContext, useContext, useEffect, useState } from 'react'
 import { getAllTasks, addTask, updateTask, deleteTask, getAllCategories, addCategory, deleteCategory } from '../db/database'
 import { v4 as uuidv4 } from 'uuid'
@@ -8,6 +9,7 @@ export const TaskProvider = ({ children }) => {
   const [tasks, setTasks] = useState([])
   const [categories, setCategories] = useState([])
   const [loading, setLoading] = useState(true)
+
 
   // Load everything from DB on startup
   useEffect(() => {
@@ -80,6 +82,29 @@ export const TaskProvider = ({ children }) => {
     setCategories(prev => prev.filter(c => c.id !== id))
   }
 
+  const handleExport = () => {
+    exportData(tasks, categories)
+  }
+
+  const handleImport = async (file) => {
+    try {
+      const data = await importData(file)
+      for (const task of data.tasks) {
+        await addTask(task)
+      }
+      for (const category of data.categories) {
+        await addCategory(category)
+      }
+      const savedTasks = await getAllTasks()
+      const savedCategories = await getAllCategories()
+      setTasks(savedTasks)
+      setCategories(savedCategories)
+      alert('Import successful!')
+    } catch (err) {
+      alert(err.message)
+    }
+  }
+
   return (
     <TaskContext.Provider value={{
       tasks,
@@ -92,6 +117,8 @@ export const TaskProvider = ({ children }) => {
       clearCompleted,
       createCategory,
       removeCategory,
+      handleExport,
+      handleImport,
     }}>
       {children}
     </TaskContext.Provider>
