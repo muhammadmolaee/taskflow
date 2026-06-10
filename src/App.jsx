@@ -1,3 +1,4 @@
+import Spinner from './components/Spinner'
 import { useState } from 'react'
 import { useTasks } from './context/TaskContext'
 import useFilters from './hooks/useFilters'
@@ -28,7 +29,7 @@ function App() {
     return (
       <div className={darkMode ? 'dark' : ''}>
         <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
-          <p className="text-gray-400 text-lg">Loading TaskFlow...</p>
+          <Spinner message="Loading TaskFlow..." />
         </div>
       </div>
     )
