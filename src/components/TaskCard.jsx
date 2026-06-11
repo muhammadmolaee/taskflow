@@ -101,7 +101,7 @@ const TaskCard = ({ task }) => {
   }
 
   return (
-    <div className={`bg-white dark:bg-gray-800 rounded-2xl shadow p-4 flex gap-3 items-start ${priorityStyles[task.priority]}`}>
+    <div className={`bg-white dark:bg-gray-800 rounded-2xl shadow p-4 flex gap-3 items-start animate-slide-up ${priorityStyles[task.priority]}`}>
 
       {/* Checkbox */}
       <button

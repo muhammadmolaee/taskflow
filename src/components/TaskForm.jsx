@@ -48,7 +48,7 @@ const TaskForm = ({ onTaskAdded }) => {
 
       {/* Expanded options */}
       {expanded && (
-        <div className="mt-3 grid grid-cols-1 gap-3">
+        <div className="mt-3 grid grid-cols-1 gap-3 animate-slide-down">
 
           <textarea
             placeholder="Description (optional)"
