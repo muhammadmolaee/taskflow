@@ -1,3 +1,4 @@
+import ProgressBar from './components/ProgressBar'
 import Toast from './components/Toast'
 import useToast from './hooks/useToast'
 import Spinner from './components/Spinner'
@@ -63,7 +64,7 @@ function App() {
               <p className="text-xs text-gray-400 mt-1">Overdue</p>
             </div>
           </div>
-
+          <ProgressBar total={stats.total} completed={stats.completed} />
           <CategoryManager />
           <TaskForm onTaskAdded={() => addToast('Task added successfully! 🎉')} />
           <FilterBar filters={filters} setFilters={setFilters} sortBy={sortBy} setSortBy={setSortBy} />
