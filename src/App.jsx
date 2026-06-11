@@ -1,3 +1,4 @@
+import ScrollToTop from './components/ScrollToTop'
 import useKeyboardShortcuts from './hooks/useKeyboardShortcuts'
 import { useRef } from 'react'
 import ReminderBanner from './components/ReminderBanner'
@@ -92,6 +93,7 @@ function App() {
         </main>
       </div>
       <Toast toasts={toasts} removeToast={removeToast} />
+      <ScrollToTop />
     </div>
   )
 }
