@@ -1,3 +1,4 @@
+import ConfirmDialog from './ConfirmDialog'
 import { useState } from 'react'
 import { useTasks } from '../context/TaskContext'
 import { Trash2, Pencil, Check, X, AlertCircle } from 'lucide-react'
@@ -19,6 +20,7 @@ const TaskCard = ({ task }) => {
   const { toggleTask, removeTask, editTask, categories } = useTasks()
   const [isEditing, setIsEditing] = useState(false)
   const [editTitle, setEditTitle] = useState(task.title)
+  const [showConfirm, setShowConfirm] = useState(false)
   const [editDescription, setEditDescription] = useState(task.description)
   const [editPriority, setEditPriority] = useState(task.priority)
   const [editDueDate, setEditDueDate] = useState(task.dueDate || '')
@@ -154,13 +156,20 @@ const TaskCard = ({ task }) => {
           <Pencil size={16} />
         </button>
         <button
-          onClick={() => removeTask(task.id)}
+          onClick={() => setShowConfirm(true)}
           className="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-400 hover:text-red-500 transition"
         >
           <Trash2 size={16} />
         </button>
       </div>
-
+      <ConfirmDialog
+        isOpen={showConfirm}
+        onConfirm={() => {
+          removeTask(task.id)
+          setShowConfirm(false)
+        }}
+        onCancel={() => setShowConfirm(false)}
+      />
     </div>
   )
 }
