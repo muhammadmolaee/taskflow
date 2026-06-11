@@ -1,3 +1,5 @@
+import useKeyboardShortcuts from './hooks/useKeyboardShortcuts'
+import { useRef } from 'react'
 import ReminderBanner from './components/ReminderBanner'
 import ProgressBar from './components/ProgressBar'
 import Toast from './components/Toast'
@@ -13,6 +15,12 @@ import FilterBar from './components/FilterBar'
 import CategoryManager from './components/CategoryManager'
 
 function App() {
+  const taskInputRef = useRef(null)
+  const searchInputRef = useRef(null)
+  useKeyboardShortcuts({
+    onNewTask: () => taskInputRef.current?.focus(),
+    onSearch: () => searchInputRef.current?.focus(),
+  })
   const { tasks, loading } = useTasks()
   const { toasts, addToast, removeToast } = useToast()
   const [darkMode, setDarkMode] = useState(window.matchMedia('(prefers-color-scheme: dark)').matches)
@@ -68,8 +76,17 @@ function App() {
           <ReminderBanner />
           <ProgressBar total={stats.total} completed={stats.completed} />
           <CategoryManager />
-          <TaskForm onTaskAdded={() => addToast('Task added successfully! 🎉')} />
-          <FilterBar filters={filters} setFilters={setFilters} sortBy={sortBy} setSortBy={setSortBy} />
+          <TaskForm
+            onTaskAdded={() => addToast('Task added successfully! 🎉')}
+            inputRef={taskInputRef}
+          />
+          <FilterBar
+            filters={filters}
+            setFilters={setFilters}
+            sortBy={sortBy}
+            setSortBy={setSortBy}
+            searchRef={searchInputRef}
+          />
           <TaskList tasks={filteredTasks} />
 
         </main>

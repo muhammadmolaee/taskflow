@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useTasks } from '../context/TaskContext'
 import { PlusCircle } from 'lucide-react'
 
-const TaskForm = ({ onTaskAdded }) => {
+const TaskForm = ({ onTaskAdded, inputRef }) => {
   const { createTask, categories } = useTasks()
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
@@ -30,8 +30,9 @@ const TaskForm = ({ onTaskAdded }) => {
       {/* Main input */}
       <div className="flex gap-2">
         <input
+          ref={inputRef}
           type="text"
-          placeholder="Add a new task..."
+          placeholder="Add a new task... (press N)"
           value={title}
           onChange={e => setTitle(e.target.value)}
           onFocus={() => setExpanded(true)}
