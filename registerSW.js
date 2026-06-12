@@ -1,1 +1,1 @@
-if('serviceWorker' in navigator) {window.addEventListener('load', () => {navigator.serviceWorker.register('/taskflow-pwa/sw.js', { scope: '/taskflow-pwa/' })})}
+if('serviceWorker' in navigator) {window.addEventListener('load', () => {navigator.serviceWorker.register('/taskflow/sw.js', { scope: '/taskflow/' })})}
