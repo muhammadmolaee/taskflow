@@ -92,11 +92,12 @@ const TaskForm = ({ onTaskAdded, inputRef }) => {
               type="date"
               value={dueDate}
               onChange={(e) => setDueDate(e.target.value)}
-              className="w-full bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-white rounded-xl px-3 py-2 outline-none appearance-none"
+              className="w-full bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-white rounded-xl px-3 py-2 outline-none appearance-none cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600 transition"
             />
             {!dueDate && (
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
-                📅 Due date (optional)
+              <span className="absolute inset-0 flex items-center px-3 text-gray-400 pointer-events-none rounded-xl bg-gray-100 dark:bg-gray-700">
+                <span className="mr-2">📅</span>
+                <span className="text-sm">Due date (optional)</span>
               </span>
             )}
           </div>
