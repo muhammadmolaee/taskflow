@@ -15,19 +15,19 @@ const TaskForm = ({ onTaskAdded, inputRef }) => {
     e.preventDefault();
     if (!title.trim()) return;
     await createTask({ title, description, priority, category, dueDate });
-    if (onTaskAdded) onTaskAdded();
     setTitle("");
     setDescription("");
     setPriority("medium");
     setCategory("");
     setDueDate("");
     setExpanded(false);
+    if (onTaskAdded) onTaskAdded();
   };
 
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-white dark:bg-gray-800 rounded-2xl shadow p-4 mb-6"
+      className="bg-white dark:bg-gray-800 rounded-2xl shadow p-4 mb-6 w-full"
     >
       {/* Main input */}
       <div className="flex gap-2 w-full">
@@ -38,7 +38,7 @@ const TaskForm = ({ onTaskAdded, inputRef }) => {
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           onFocus={() => setExpanded(true)}
-          className="flex-1 bg-gray-100 dark:bg-gray-700 dark:text-white rounded-xl px-4 py-2 outline-none focus:ring-2 focus:ring-indigo-400"
+          className="flex-1 min-w-0 bg-gray-100 dark:bg-gray-700 dark:text-white rounded-xl px-4 py-2 outline-none focus:ring-2 focus:ring-indigo-400"
         />
         <button
           type="submit"
@@ -51,49 +51,57 @@ const TaskForm = ({ onTaskAdded, inputRef }) => {
 
       {/* Expanded options */}
       {expanded && (
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+        <div className="mt-3 flex flex-col gap-3 animate-slide-down w-full">
+          {/* Description */}
           <textarea
             placeholder="Description (optional)"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            className="bg-gray-100 dark:bg-gray-700 dark:text-white rounded-xl px-4 py-2 outline-none focus:ring-2 focus:ring-indigo-400 resize-none"
+            className="w-full bg-gray-100 dark:bg-gray-700 dark:text-white rounded-xl px-4 py-2 outline-none focus:ring-2 focus:ring-indigo-400 resize-none"
             rows={2}
           />
 
-          <div className="grid grid-cols-3 gap-2">
-            {/* Priority */}
-            <select
-              value={priority}
-              onChange={(e) => setPriority(e.target.value)}
-              className="bg-gray-100 dark:bg-gray-700 dark:text-white rounded-xl px-3 py-2 outline-none"
-            >
-              <option value="high">🔴 High</option>
-              <option value="medium">🟡 Medium</option>
-              <option value="low">🟢 Low</option>
-            </select>
+          {/* Priority */}
+          <select
+            value={priority}
+            onChange={(e) => setPriority(e.target.value)}
+            className="w-full bg-gray-100 dark:bg-gray-700 dark:text-white rounded-xl px-3 py-2 outline-none"
+          >
+            <option value="high">🔴 High Priority</option>
+            <option value="medium">🟡 Medium Priority</option>
+            <option value="low">🟢 Low Priority</option>
+          </select>
 
-            {/* Category */}
-            <select
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              className="bg-gray-100 dark:bg-gray-700 dark:text-white rounded-xl px-3 py-2 outline-none"
-            >
-              <option value="">No Category</option>
-              {categories.map((cat) => (
-                <option key={cat.id} value={cat.id}>
-                  {cat.name}
-                </option>
-              ))}
-            </select>
+          {/* Category */}
+          <select
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            className="w-full bg-gray-100 dark:bg-gray-700 dark:text-white rounded-xl px-3 py-2 outline-none"
+          >
+            <option value="">No Category</option>
+            {categories.map((cat) => (
+              <option key={cat.id} value={cat.id}>
+                {cat.name}
+              </option>
+            ))}
+          </select>
 
-            {/* Due date */}
-            <input
-              type="date"
-              value={dueDate}
-              onChange={(e) => setDueDate(e.target.value)}
-              className="bg-gray-100 dark:bg-gray-700 dark:text-white rounded-xl px-3 py-2 outline-none"
-            />
-          </div>
+          {/* Due date */}
+          <input
+            type="date"
+            value={dueDate}
+            onChange={(e) => setDueDate(e.target.value)}
+            className="w-full bg-gray-100 dark:bg-gray-700 dark:text-white rounded-xl px-3 py-2 outline-none"
+          />
+
+          {/* Cancel expanded */}
+          <button
+            type="button"
+            onClick={() => setExpanded(false)}
+            className="text-sm text-gray-400 hover:text-gray-600 self-start"
+          >
+            ✕ Collapse
+          </button>
         </div>
       )}
     </form>
