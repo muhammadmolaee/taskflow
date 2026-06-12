@@ -8,8 +8,7 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: "autoUpdate",
-      base: "/taskflow/",
-      scope: "/taskflow/",
+      injectRegister: "auto",
       includeAssets: ["favicon.ico", "pwa-192x192.png", "pwa-512x512.png"],
       manifest: {
         name: "TaskFlow PWA",
@@ -23,17 +22,17 @@ export default defineConfig({
         start_url: "/taskflow/",
         icons: [
           {
-            src: "/taskflow/pwa-192x192.png",
+            src: "pwa-192x192.png",
             sizes: "192x192",
             type: "image/png",
           },
           {
-            src: "/taskflow/pwa-512x512.png",
+            src: "pwa-512x512.png",
             sizes: "512x512",
             type: "image/png",
           },
           {
-            src: "/taskflow/pwa-512x512.png",
+            src: "pwa-512x512.png",
             sizes: "512x512",
             type: "image/png",
             purpose: "any maskable",
@@ -43,6 +42,7 @@ export default defineConfig({
       workbox: {
         globPatterns: ["**/*.{js,css,html,ico,png,svg}"],
         navigateFallback: "/taskflow/index.html",
+        cleanupOutdatedCaches: true,
       },
     }),
   ],
