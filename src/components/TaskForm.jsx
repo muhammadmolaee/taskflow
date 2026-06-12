@@ -87,13 +87,19 @@ const TaskForm = ({ onTaskAdded, inputRef }) => {
           </select>
 
           {/* Due date */}
-          <input
-            type="date"
-            value={dueDate}
-            onChange={(e) => setDueDate(e.target.value)}
-            className="w-full bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-white rounded-xl px-3 py-2 outline-none appearance-none"
-          />
-
+          <div className="relative w-full">
+            <input
+              type="date"
+              value={dueDate}
+              onChange={(e) => setDueDate(e.target.value)}
+              className="w-full bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-white rounded-xl px-3 py-2 outline-none appearance-none"
+            />
+            {!dueDate && (
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
+                📅 Due date (optional)
+              </span>
+            )}
+          </div>
           {/* Cancel expanded */}
           <button
             type="button"
