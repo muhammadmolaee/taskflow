@@ -2,19 +2,26 @@ import { Sun, Moon, Download, Upload } from "lucide-react";
 import { useTasks } from "../context/TaskContext";
 import { useRef } from "react";
 
-const Header = ({ darkMode, toggleDarkMode }) => {
+const Header = ({
+  darkMode,
+  toggleDarkMode,
+  onImportSuccess,
+  onImportError,
+}) => {
   const { handleExport, handleImport } = useTasks();
   const fileInputRef = useRef(null);
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-    if (file) handleImport(file);
+    if (file) {
+      handleImport(file, onImportSuccess, onImportError);
+      e.target.value = "";
+    }
   };
 
   return (
     <header className="bg-white dark:bg-gray-900 shadow-sm sticky top-0 z-50">
       <div className="max-w-3xl mx-auto px-4 py-4 flex items-center justify-between">
-        {/* Logo */}
         <div className="flex items-center gap-2">
           <img
             src={`${import.meta.env.BASE_URL}pwa-192x192.png`}
@@ -26,9 +33,7 @@ const Header = ({ darkMode, toggleDarkMode }) => {
           </h1>
         </div>
 
-        {/* Actions */}
         <div className="flex items-center gap-2">
-          {/* Export */}
           <button
             onClick={handleExport}
             title="Export tasks"
@@ -37,7 +42,6 @@ const Header = ({ darkMode, toggleDarkMode }) => {
             <Download className="text-gray-500 dark:text-gray-400" size={20} />
           </button>
 
-          {/* Import */}
           <button
             onClick={() => fileInputRef.current.click()}
             title="Import tasks"
@@ -53,7 +57,6 @@ const Header = ({ darkMode, toggleDarkMode }) => {
             className="hidden"
           />
 
-          {/* Dark mode toggle */}
           <button
             onClick={toggleDarkMode}
             className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition"

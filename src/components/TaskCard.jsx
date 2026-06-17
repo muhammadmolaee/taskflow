@@ -20,8 +20,8 @@ const priorityBadge = {
 const TaskCard = ({ task }) => {
   const { toggleTask, removeTask, editTask, categories } = useTasks();
   const [isEditing, setIsEditing] = useState(false);
-  const [editTitle, setEditTitle] = useState(task.title);
   const [showConfirm, setShowConfirm] = useState(false);
+  const [editTitle, setEditTitle] = useState(task.title);
   const [editDescription, setEditDescription] = useState(task.description);
   const [editPriority, setEditPriority] = useState(task.priority);
   const [editDueDate, setEditDueDate] = useState(task.dueDate || "");
@@ -48,19 +48,20 @@ const TaskCard = ({ task }) => {
         <input
           value={editTitle}
           onChange={(e) => setEditTitle(e.target.value)}
-          className="bg-gray-100 dark:bg-gray-700 dark:text-white rounded-xl px-4 py-2 outline-none focus:ring-2 focus:ring-indigo-400"
+          className="w-full bg-gray-100 dark:bg-gray-700 dark:text-white rounded-xl px-4 py-2 outline-none focus:ring-2 focus:ring-indigo-400"
         />
         <textarea
           value={editDescription}
           onChange={(e) => setEditDescription(e.target.value)}
-          className="bg-gray-100 dark:bg-gray-700 dark:text-white rounded-xl px-4 py-2 outline-none resize-none"
+          className="w-full bg-gray-100 dark:bg-gray-700 dark:text-white rounded-xl px-4 py-2 outline-none resize-none"
           rows={2}
         />
-        <div className="grid grid-cols-3 gap-2">
+        {/* Responsive grid — 1 col on mobile, 3 on desktop */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
           <select
             value={editPriority}
             onChange={(e) => setEditPriority(e.target.value)}
-            className="bg-gray-100 dark:bg-gray-700 dark:text-white rounded-xl px-3 py-2 outline-none"
+            className="w-full bg-gray-100 dark:bg-gray-700 dark:text-white rounded-xl px-3 py-2 outline-none"
           >
             <option value="high">🔴 High</option>
             <option value="medium">🟡 Medium</option>
@@ -69,7 +70,7 @@ const TaskCard = ({ task }) => {
           <select
             value={editCategory}
             onChange={(e) => setEditCategory(e.target.value)}
-            className="bg-gray-100 dark:bg-gray-700 dark:text-white rounded-xl px-3 py-2 outline-none"
+            className="w-full bg-gray-100 dark:bg-gray-700 dark:text-white rounded-xl px-3 py-2 outline-none"
           >
             <option value="">No Category</option>
             {categories.map((cat) => (
@@ -78,33 +79,34 @@ const TaskCard = ({ task }) => {
               </option>
             ))}
           </select>
+          {/* Date picker fix — pointer-events-none on placeholder only */}
           <div className="relative w-full">
             <input
               type="date"
               value={editDueDate}
               onChange={(e) => setEditDueDate(e.target.value)}
-              className="w-full bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-white rounded-xl px-3 py-2 outline-none appearance-none cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600 transition"
+              className="w-full bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-white rounded-xl px-3 py-2 outline-none cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600 transition"
             />
             {!editDueDate && (
               <span className="absolute inset-0 flex items-center px-3 text-gray-400 pointer-events-none rounded-xl bg-gray-100 dark:bg-gray-700">
                 <span className="mr-2">📅</span>
-                <span className="text-sm">Due date (optional)</span>
+                <span className="text-sm">Due date</span>
               </span>
             )}
           </div>
         </div>
-        <div className="flex gap-2 justify-end">
+        <div className="flex gap-2 justify-end mt-1">
           <button
             onClick={() => setIsEditing(false)}
-            className="flex items-center gap-1 px-3 py-1 rounded-xl bg-gray-100 dark:bg-gray-700 dark:text-white hover:bg-gray-200 transition"
+            className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-gray-100 dark:bg-gray-700 dark:text-white hover:bg-gray-200 transition text-sm"
           >
-            <X size={16} /> Cancel
+            <X size={14} /> Cancel
           </button>
           <button
             onClick={handleSave}
-            className="flex items-center gap-1 px-3 py-1 rounded-xl bg-indigo-500 text-white hover:bg-indigo-600 transition"
+            className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-indigo-500 text-white hover:bg-indigo-600 transition text-sm"
           >
-            <Check size={16} /> Save
+            <Check size={14} /> Save
           </button>
         </div>
       </div>
@@ -131,23 +133,21 @@ const TaskCard = ({ task }) => {
       {/* Content */}
       <div className="flex-1 min-w-0">
         <p
-          className={`font-medium dark:text-white ${task.completed ? "line-through text-gray-400" : "text-gray-800"}`}
+          className={`font-medium dark:text-white break-words ${task.completed ? "line-through text-gray-400" : "text-gray-800"}`}
         >
           {task.title}
         </p>
         {task.description && (
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5 break-words">
             {task.description}
           </p>
         )}
         <div className="flex flex-wrap gap-2 mt-2">
-          {/* Priority badge */}
           <span
             className={`text-xs px-2 py-0.5 rounded-full font-medium ${priorityBadge[task.priority]}`}
           >
             {task.priority}
           </span>
-          {/* Category badge */}
           {category && (
             <span
               className="text-xs px-2 py-0.5 rounded-full text-white font-medium"
@@ -156,7 +156,6 @@ const TaskCard = ({ task }) => {
               {category.name}
             </span>
           )}
-          {/* Due date */}
           {task.dueDate && (
             <span
               className={`text-xs px-2 py-0.5 rounded-full flex items-center gap-1 ${getDueDateColor(task.dueDate, task.completed)}`}
@@ -185,6 +184,7 @@ const TaskCard = ({ task }) => {
           <Trash2 size={16} />
         </button>
       </div>
+
       <ConfirmDialog
         isOpen={showConfirm}
         onConfirm={() => {

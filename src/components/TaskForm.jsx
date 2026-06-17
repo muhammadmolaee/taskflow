@@ -86,13 +86,13 @@ const TaskForm = ({ onTaskAdded, inputRef }) => {
             ))}
           </select>
 
-          {/* Due date */}
+          {/* Due date — fixed: placeholder is behind input so clicks go through */}
           <div className="relative w-full">
             <input
               type="date"
               value={dueDate}
               onChange={(e) => setDueDate(e.target.value)}
-              className="w-full bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-white rounded-xl px-3 py-2 outline-none appearance-none cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600 transition"
+              className="w-full bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-white rounded-xl px-3 py-2 outline-none cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600 transition"
             />
             {!dueDate && (
               <span className="absolute inset-0 flex items-center px-3 text-gray-400 pointer-events-none rounded-xl bg-gray-100 dark:bg-gray-700">
@@ -101,7 +101,8 @@ const TaskForm = ({ onTaskAdded, inputRef }) => {
               </span>
             )}
           </div>
-          {/* Cancel expanded */}
+
+          {/* Collapse */}
           <button
             type="button"
             onClick={() => setExpanded(false)}

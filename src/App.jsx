@@ -1,27 +1,20 @@
-import ScrollToTop from "./components/ScrollToTop";
-import useKeyboardShortcuts from "./hooks/useKeyboardShortcuts";
-import { useRef } from "react";
-import ReminderBanner from "./components/ReminderBanner";
-import ProgressBar from "./components/ProgressBar";
-import Toast from "./components/Toast";
-import useToast from "./hooks/useToast";
-import Spinner from "./components/Spinner";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useTasks } from "./context/TaskContext";
 import useFilters from "./hooks/useFilters";
+import useToast from "./hooks/useToast";
+import useKeyboardShortcuts from "./hooks/useKeyboardShortcuts";
 import Header from "./components/Header";
 import TaskForm from "./components/TaskForm";
 import TaskList from "./components/TaskList";
 import FilterBar from "./components/FilterBar";
 import CategoryManager from "./components/CategoryManager";
+import ProgressBar from "./components/ProgressBar";
+import ReminderBanner from "./components/ReminderBanner";
+import Toast from "./components/Toast";
+import ScrollToTop from "./components/ScrollToTop";
+import Spinner from "./components/Spinner";
 
 function App() {
-  const taskInputRef = useRef(null);
-  const searchInputRef = useRef(null);
-  useKeyboardShortcuts({
-    onNewTask: () => taskInputRef.current?.focus(),
-    onSearch: () => searchInputRef.current?.focus(),
-  });
   const { tasks, loading } = useTasks();
   const { toasts, addToast, removeToast } = useToast();
   const [darkMode, setDarkMode] = useState(
@@ -35,7 +28,15 @@ function App() {
     status: "",
   });
 
+  const taskInputRef = useRef(null);
+  const searchInputRef = useRef(null);
+
   const { filteredTasks, stats } = useFilters(tasks, filters, sortBy);
+
+  useKeyboardShortcuts({
+    onNewTask: () => taskInputRef.current?.focus(),
+    onSearch: () => searchInputRef.current?.focus(),
+  });
 
   const toggleDarkMode = () => setDarkMode((prev) => !prev);
 
@@ -52,7 +53,12 @@ function App() {
   return (
     <div className={darkMode ? "dark" : ""}>
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
-        <Header darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
+        <Header
+          darkMode={darkMode}
+          toggleDarkMode={toggleDarkMode}
+          onImportSuccess={(msg) => addToast(msg, "success")}
+          onImportError={(msg) => addToast(msg, "error")}
+        />
 
         <main className="max-w-3xl mx-auto px-4 py-6">
           {/* Stats bar */}
@@ -80,6 +86,7 @@ function App() {
               <p className="text-xs text-gray-400 mt-1">Overdue</p>
             </div>
           </div>
+
           <ReminderBanner />
           <ProgressBar total={stats.total} completed={stats.completed} />
           <CategoryManager />
@@ -97,6 +104,7 @@ function App() {
           <TaskList tasks={filteredTasks} />
         </main>
       </div>
+
       <Toast toasts={toasts} removeToast={removeToast} />
       <ScrollToTop />
     </div>
