@@ -86,7 +86,7 @@ const TaskForm = ({ onTaskAdded, inputRef }) => {
             ))}
           </select>
 
-          {/* Due date — fixed: placeholder is behind input so clicks go through */}
+          {/* Due date */}
           <div className="relative w-full">
             <input
               type="date"
@@ -95,9 +95,9 @@ const TaskForm = ({ onTaskAdded, inputRef }) => {
               className="w-full bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-white rounded-xl px-3 py-2 outline-none cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600 transition"
             />
             {!dueDate && (
-              <span className="absolute inset-0 flex items-center px-3 text-gray-400 pointer-events-none rounded-xl bg-gray-100 dark:bg-gray-700">
+              <span className="absolute left-0 top-0 bottom-0 flex items-center px-3 text-gray-400 pointer-events-none w-3/4">
                 <span className="mr-2">📅</span>
-                <span className="text-sm">Due date (optional)</span>
+                <span className="text-sm truncate">Due date (optional)</span>
               </span>
             )}
           </div>
